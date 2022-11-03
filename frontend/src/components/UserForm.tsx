@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
-import React, { FormEvent, useState } from 'react'
-import ReactDOM from 'react-dom/client'
-import { GET_USER } from '../App'
+import { FormEvent, useState } from 'react'
+import { GET_USERS } from '../App'
+import { client } from '../lib/apollo'
 
 const CREATE_USER = gql`
   mutation($name: String!) {
@@ -27,8 +27,21 @@ export function UserForm() {
       variables: {
         name
       },
-      refetchQueries: [GET_USER]
-    })    
+      // refetchQueries: [GET_USERS] //Reconecta o backend após a execução da mutation
+      update: (cache, {data: {createUser}}) => { //Aqui executa o cache do query, sem precisar reconectar no backend
+        const {users} = client.readQuery({query: GET_USERS})
+
+        cache.writeQuery({
+          query: GET_USERS,
+          data: {
+            users: [
+              ...users,
+              createUser
+            ]
+          }
+        })
+      }
+    })
   }
 
   return (
