@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import React, { FormEvent, useState } from 'react'
 import ReactDOM from 'react-dom/client'
+import { GET_USER } from '../App'
 
 const CREATE_USER = gql`
   mutation($name: String!) {
@@ -26,6 +27,7 @@ export function UserForm() {
       variables: {
         name
       },
+      refetchQueries: [GET_USER]
     })    
   }
 
