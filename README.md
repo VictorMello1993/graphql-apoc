@@ -1,2 +1,2 @@
 # graphql-apoc
-Testando os conceitos de GraphQL
+Conhecendo GraphQL
